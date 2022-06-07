@@ -6,13 +6,17 @@
 // created on May-Jun 2022
 // this file defines function for the game
 
-// import the splash scene and title scene
+// import the scenes
 import SplashScene from './splashScene.js'
 import TitleScene from './titleScene.js'
+import MenuScene from './menuScene.js'
+import GameScene from './gameScene.js'
 
-// our game scene
+// our game scenes
 const splashScene = new SplashScene()
 const titleScene = new TitleScene()
+const menuScene = new MenuScene()
+const gameScene = new GameScene()
 
 // game scene
 const config = {
@@ -37,9 +41,11 @@ const config = {
 const game = new Phaser.Game(config)
 
 // load scenes
-// every key used can not be reused
+// every key used is global and can not be reused
 game.scene.add('splashScene', splashScene)
 game.scene.add('titleScene', titleScene)
+game.scene.add('menuScene', menuScene)
+game.scene.add('gameScene', gameScene)
 
 // start title
 game.scene.start('splashScene')

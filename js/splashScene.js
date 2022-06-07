@@ -18,13 +18,14 @@ class SplashScene extends Phaser.Scene {
     console.log('Splash Scene')
     this.load.image('splashSceneBackground', './assets/splashSceneImage.png')
   }
-  //determine the location fo the sprite
+  //determine the location of the sprite
   create (data) {
     this.splashSceneBackgroundImage = this.add.sprite(0, 0, 'splashSceneBackground')
     this.splashSceneBackgroundImage.x = 1920 / 2
     this.splashSceneBackgroundImage.y = 1080 / 2
   }
 
+  //determine how long the scene will stay on the screen (ms)
   update (time, delta){
     if (time > 3000){
       this.scene.switch('titleScene')  
