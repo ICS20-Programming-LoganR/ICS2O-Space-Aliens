@@ -20,14 +20,14 @@ class TitleScene extends Phaser.Scene {
 
   preload () {
     console.log('Title Scene')
-    this.load.image('titleSceneBackground', 'assets/aliens_screen_image.jpg')
+    this.load.image('titleSceneBackgroundImage', 'assets/titleScene.png')
   }
 
   create (data) {
-    this.titleSceneBackgroundImage = this.add.sprite(0, 0, 'titleSceneBackgroundImage').setScale(2.75)
+    this.titleSceneBackgroundImage = this.add.sprite(0, 0, 'titleSceneBackgroundImage')
     this.titleSceneBackgroundImage.x = 1920 / 2
     this.titleSceneBackgroundImage.y = 1080 / 2
-
+//add text to the title screen
     this.titleSceneText = this.add.text(1920 / 2, (1080 / 2) + 350, 'Space Duck Hunt', this.titleSceneTextStyle).setOrigin(0.5)
   }
 

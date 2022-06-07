@@ -22,13 +22,14 @@ class MenuScene extends Phaser.Scene {
   preload () {
     console.log('Menu Scene')
     //load the image
-    this.load.image('menuSceneBackground', 'assets/aliens_screen_image2.jpg')
+    this.load.image('menuSceneBackgroundImage', 'assets/menuScene.jpg')
+    //load the start button
     this.load.image('startButton', 'assets/start.png')
   }
 
   create (data) {
     //assign the variable
-    this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackhroundImage')
+    this.menuSceneBackgroundImage = this.add.sprite(0, 0, 'menuSceneBackgroundImage')
     //determine the location of the image
     this.menuSceneBackgroundImage.x = 1920 / 2
     this.menuSceneBackgroundImage.y = 1080 / 2
