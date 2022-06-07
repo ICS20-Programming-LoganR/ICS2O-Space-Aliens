@@ -37,6 +37,30 @@ class GameScene extends Phaser.Scene {
   }
   //determine how long the scene will show for
   update (time, delta){
+    // called 60 times a second, hopefully.
+
+    //declare functions to check for an input on the keyboard
+    const keyLeftObj = this.input.keyboard.addKey('LEFT')
+    const keyRightObj = this.input.keyboard.addKey('RIGHT')
+
+    //make an if statement for if the left key is being pressed down
+    if(keyLeftObj.isDown === true) {
+      //move the ship left
+      this.ship.x = this.ship.x - 15
+      //prevent the ship from moving off the screen
+      if (this.ship.x < 0) {
+        this.ship.x = 0
+      }
+    }
+    //make an if statement for if the right key is being pressed down
+    if(keyRightObj.isDown === true) {
+      //move the ship right
+      this.ship.x = this.ship.x + 15
+      //prevent the ship from moving off the screen
+      if (this.ship.x > 1920) {
+        this.ship.x = 1920
+      }
+    }
   }
 }
 
