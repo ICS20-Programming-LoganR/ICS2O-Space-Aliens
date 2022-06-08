@@ -6,6 +6,22 @@
 // This file defines the game scene
 
 class GameScene extends Phaser.Scene {
+
+  // create a duck
+  createDuck() {
+    //generate a random location for a duck to be spawned
+    const duckXLocation = Math.floor(Math.random() * 1920) + 1
+    //change the X velocity of the duck velocity
+    let duckXVelocity = Math.floor(Math.random() * 50) + 1
+    //randomlt decide which direction the duck will move in
+    duckXVelocity *= Math.round(Math.random()) ? 1 : - 1
+    const aDuck = this.physics.add.sprite(duckXLocation, -100, 'duck').setScale(4.5)
+    //make the duck move
+    aDuck.body.velocity.y = 200
+    aDuck.body.velocity.x = duckXVelocity
+    this.duckGroup.add(aDuck)
+  }
+  
   constructor () {
     super({ key: 'gameScene' })
 
@@ -31,6 +47,10 @@ class GameScene extends Phaser.Scene {
     this.load.image('ship', 'assets/spaceShip.png')
     //load the missile
     this.load.image('missile', 'assets/missile.png')
+    //load the duck
+    this.load.image('duck', 'assets/duck.png')
+    //load the sound when the missile is fired
+    this.load.audio('laser', 'assets/laser1.wav')
   }
 
   create (data) {
@@ -42,6 +62,10 @@ class GameScene extends Phaser.Scene {
 
     //create a group of missiles
     this.missileGroup = this.physics.add.group()
+
+    //create a group for the ducks
+    this.duckGroup = this.add.group()
+    this.createDuck()
   }
   //determine how long the scene will show for
   update (time, delta){
@@ -75,14 +99,24 @@ class GameScene extends Phaser.Scene {
       if (this.fireMissile === false) {
         //fire missile
         this.fireMissile = true
-        const aNewMissile = this.physics.add.sprite(this.ship.x, this.ship.y, 'missile')
+        const aNewMissile = this.physics.add.sprite(this.ship.x, this.ship.y, 'missile').setScale(2.0)
         this.missileGroup.add(aNewMissile)
+        //make the sound play when a missile is fired
+        this.sound.play('laser')
       }
     }
 
     if (keySpaceObj.isUp === true) {
       this.fireMissile = false
     }
+//make it so the missile will move after being shot
+   this.missileGroup.children.each(function (item) {
+      item.y = item.y - 15
+     //delete the missiles when they move off screen
+     if(item.y < 0) {
+       item.destroy
+     }
+    })
   }
 }
 
