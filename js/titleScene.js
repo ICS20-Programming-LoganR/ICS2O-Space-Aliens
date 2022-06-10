@@ -8,22 +8,25 @@
 class TitleScene extends Phaser.Scene {
   constructor () {
     super({ key: 'titleScene' })
-
+// define the variables
   this.titleSceneBackgroundImage = null
   this.titleSceneText = null
   this.titleSceneTextStyle = { font: '200px Times', fill: '#fde4b9', align: 'center' }
   }
 
-  init (data) {                
+  init (data) {    
+    //set the background colour
     this.cameras.main.setBackgroundColor('#ffffff')
   }
 
   preload () {
     console.log('Title Scene')
+    // load the title scene
     this.load.image('titleSceneBackgroundImage', 'assets/titleScene.png')
   }
 
   create (data) {
+    //change the location and size of the scene
     this.titleSceneBackgroundImage = this.add.sprite(0, 0, 'titleSceneBackgroundImage')
     this.titleSceneBackgroundImage.x = 1920 / 2
     this.titleSceneBackgroundImage.y = 1080 / 2
