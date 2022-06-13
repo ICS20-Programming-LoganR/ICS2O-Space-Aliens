@@ -15,7 +15,7 @@ class GameScene extends Phaser.Scene {
     let duckXVelocity = Math.floor(Math.random() * 50) + 1
     //randomlt decide which direction the duck will move in
     duckXVelocity *= Math.round(Math.random()) ? 1 : - 1
-    const aDuck = this.physics.add.sprite(duckXLocation, -100, 'duck').setScale(4.5)
+    const aDuck = this.physics.add.sprite(duckXLocation, -100, 'duck')
     //make the duck move
     aDuck.body.velocity.y = 200
     aDuck.body.velocity.x = duckXVelocity
@@ -57,11 +57,14 @@ class GameScene extends Phaser.Scene {
     this.load.image('missile', 'assets/missile.png')
     //load the duck
     this.load.image('duck', 'assets/duck.png')
+    //load the explosion of the duck
+    this.load.image('kaboom', 'assets/kaboom.png')
     //load the sound when the missile is fired
     this.load.audio('laser', 'assets/laser1.wav')
     //load the sound when the duck is shot and blows up in a comical manner
     this.load.audio('explosion', 'assets/barrelExploding.wav')
     this.load.audio('bomb', 'assets/bomb.wav')
+    this.load.audio('quack', 'assets/quack.mp3')
   }
 
   create (data) {
@@ -72,7 +75,7 @@ class GameScene extends Phaser.Scene {
     this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
     
   //give the spaceship physics and determine its starting position
-    this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship')
+    this.ship = this.physics.add.sprite(1920 / 2, 1080 - 100, 'ship').setScale(4.0)
 
     //create a group of missiles
     this.missileGroup = this.physics.add.group()
@@ -88,6 +91,7 @@ class GameScene extends Phaser.Scene {
       missileCollide.destroy()
       //play the sounds
       this.sound.play('explosion')
+      this.sound.play('quack')
       //add to the score
       this.score = this.score + 1
       this.scoreText.setText('Score: ' + this.score.toString())
@@ -149,7 +153,7 @@ class GameScene extends Phaser.Scene {
       if (this.fireMissile === false) {
         //fire missile
         this.fireMissile = true
-        const aNewMissile = this.physics.add.sprite(this.ship.x, this.ship.y, 'missile').setScale(2.0)
+        const aNewMissile = this.physics.add.sprite(this.ship.x, this.ship.y, 'missile')
         this.missileGroup.add(aNewMissile)
         //make the sound play when a missile is fired
         this.sound.play('laser')
