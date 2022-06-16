@@ -25,6 +25,8 @@ class MenuScene extends Phaser.Scene {
     this.load.image('menuSceneBackgroundImage', 'assets/menuScene.png')
     //load the start button
     this.load.image('startButton', 'assets/start.png')
+    //load the menu music
+    this.load.audio('menuMusic', 'audio/menuMusic.mp3')
   }
 
   create (data) {
@@ -36,6 +38,9 @@ class MenuScene extends Phaser.Scene {
     //determine the location of the start button
     this.startButton = this.add.sprite(1920 / 2, (1080 / 2) + 100, 'startButton')
 
+    //play the music (Arcade Kid by David Renda)
+    this.sound.play('menuMusic')
+
   //make the button interactive
     this.startButton.setInteractive({ useHandCursor: true })
     this.startButton.on('pointerdown', () => this.clickButton())
@@ -46,6 +51,7 @@ class MenuScene extends Phaser.Scene {
 //set it to go to game scene when the button is clicked
   clickButton () {
     this.scene.start('gameScene')
+    this.sound.stopAll()
   }
 }
 
