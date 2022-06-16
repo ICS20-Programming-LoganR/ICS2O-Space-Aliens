@@ -13,13 +13,18 @@ class GameScene extends Phaser.Scene {
     const duckXLocation = Math.floor(Math.random() * 1920) + 1
     //change the X velocity of the duck velocity
     let duckXVelocity = Math.floor(Math.random() * 50) + 1
-    //randomlt decide which direction the duck will move in
+    //randomly decide which direction the duck will move in
     duckXVelocity *= Math.round(Math.random()) ? 1 : - 1
     const aDuck = this.physics.add.sprite(duckXLocation, -100, 'duck')
     //make the duck move
     aDuck.body.velocity.y = 200
     aDuck.body.velocity.x = duckXVelocity
     this.duckGroup.add(aDuck)
+
+    if (aDuck.body.y == 0){
+      aDuck.body.location.y = -100
+      aDuck.body.location.x = Math.floor(Math.random() * 1920) + 1
+    }
   }
   
   constructor () {
@@ -58,10 +63,12 @@ class GameScene extends Phaser.Scene {
     //load the duck
     this.load.image('duck', 'assets/duck.png')
     //load the explosion of the duck
-    this.load.image('kaboom', 'assets/kaboom.png')
+    this.load.image('kaboom', 'assets/kaboom.gif')
+    //load the background music (Funny Bit by David Renda)
+    this.load.audio('music', 'assets/BGMusic.mp3')
     //load the sound when the missile is fired
     this.load.audio('laser', 'assets/laser1.wav')
-    //load the sound when the duck is shot and blows up in a comical manner
+    //load the sounds when the duck is shot and blows up in a comical manner
     this.load.audio('explosion', 'assets/barrelExploding.wav')
     this.load.audio('bomb', 'assets/bomb.wav')
     this.load.audio('quack', 'assets/quack.mp3')
@@ -71,6 +78,8 @@ class GameScene extends Phaser.Scene {
     //set the location of the background
     this.background = this.add.image(0, 0, 'starBackground').setScale(2.0)
     this.background.setOrigin(0, 0)
+    //play the music
+    this.sound.play('music')
     //show the score on screen
     this.scoreText = this.add.text(10, 10, 'Score: ' + this.score.toString(), this.scoreTextStyle)
     
@@ -87,8 +96,9 @@ class GameScene extends Phaser.Scene {
     //collisions between the missiles and the ducks
     this.physics.add.collider(this.missileGroup, this.duckGroup, function (missileCollide, duckCollide) {
       //delete the duck and missile when they collide
-      duckCollide.destroy()
       missileCollide.destroy()
+      //make the duck explode in a comical manner
+      duckCollide.destroy()
       //play the sounds
       this.sound.play('explosion')
       this.sound.play('quack')
@@ -103,6 +113,8 @@ class GameScene extends Phaser.Scene {
 
     //game over screen
     this.physics.add.collider(this.ship, this.duckGroup, function (shipCollide, duckCollide) {
+      //stop the music
+      this.game.sound.stopAll()
       //play the sound
       this.sound.play('bomb')
       //stop all movement
@@ -111,7 +123,7 @@ class GameScene extends Phaser.Scene {
       duckCollide.destroy()
       shipCollide.destroy()
       //text when the game ends
-      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game Over!\nClick to play again.', this.gameOverTextStyle).setOrigin(0.5)
+      this.gameOverText = this.add.text(1920 / 2, 1080 / 2, 'Game Over!\nClick to restart.', this.gameOverTextStyle).setOrigin(0.5)
       //find out if the user quits the game or not
       this.gameOverText.setInteractive({ useHandCursor: true })
       //return to the game scene if the player continues
@@ -128,7 +140,17 @@ class GameScene extends Phaser.Scene {
     //declare variables to check for an input on the keyboard
     const keyLeftObj = this.input.keyboard.addKey('LEFT')
     const keyRightObj = this.input.keyboard.addKey('RIGHT')
+    const keyUpObj = this.input.keyboard.addKey('UP')
+    const keyDownObj = this.input.keyboard.addKey('DOWN')
     const keySpaceObj = this.input.keyboard.addKey('SPACE')
+    //make the Duck warp to the top of the screen when shot
+    this.duckGroup.children.each(function (item) {
+      if (item.y > 1080){
+        item.y = 0
+        const duckXCoordinate = Math.floor(Math.random() * 1920) + 1
+        item.x = duckXCoordinate
+      }
+    })
 
     //make an if statement for if the left key is being pressed down
     if(keyLeftObj.isDown === true) {
@@ -146,6 +168,24 @@ class GameScene extends Phaser.Scene {
       //prevent the ship from moving off the screen
       if (this.ship.x > 1920) {
         this.ship.x = 1920
+      }
+    }
+    //make an if statement for if the up key is being pressed down
+    if(keyUpObj.isDown === true) {
+      //move the ship left
+      this.ship.y = this.ship.y - 15
+      //prevent the ship from moving off the screen
+      if (this.ship.y > 1080) {
+        this.ship.y = 1080
+      }
+    }
+    //make an if statement for if the down key is being pressed down
+    if(keyDownObj.isDown === true) {
+      //move the ship left
+      this.ship.y = this.ship.y + 15
+      //prevent the ship from moving off the screen
+      if (this.ship.y < 0) {
+        this.ship.y = 0
       }
     }
     //create an if statement for if the space bar is being pressed down
